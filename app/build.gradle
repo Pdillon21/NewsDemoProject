@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: './gradle/dependencies.gradle'
+apply from: './gradle/ktlint.gradle'
+
+android {
+    namespace 'com.example.newsdemoproject'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.newsdemoproject"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            buildConfigField("Boolean", "SHOULD_LOG", "false")
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField("Boolean", "SHOULD_LOG", "true")
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.3.2'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    flavorDimensions("default")
+    productFlavors {
+        prod {
+            buildConfigField("String", "BASE_URL", "\"https://content.guardianapis.com\"")
+            buildConfigField("String", "API_KEY", "\"400ca6ce-a0b6-4d48-8ea0-a20fcbcf24d2\"")
+        }
+    }
+}
